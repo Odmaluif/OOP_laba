@@ -37,12 +37,13 @@ public class Main {
         }
         try{
             System.out.println("Ввод и вывод System.in и System.out");
-            InputStreamReader isr = new InputStreamReader(System.in);
-            Vehicle vehicle = VehicleMethod.readVehicle(isr);
-
-            System.out.println("\n");
+            System.out.println("Символьный поток транспортного средства бренда " + brand.getBrand());
             OutputStreamWriter osw = new OutputStreamWriter(System.out);
-            VehicleMethod.writeVehicle(vehicle, osw);
+            VehicleMethod.writeVehicle(brand, osw);
+            System.out.println("Введите символьный поток");
+            InputStreamReader isr = new InputStreamReader(System.in);
+            VehicleMethod.printModelsNames(VehicleMethod.readVehicle(isr));
+
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
