@@ -1,4 +1,6 @@
-public class Bike implements Vehicle{
+import java.io.Serializable;
+
+public class Bike implements Vehicle, Serializable {
     private String brand;
     @Override
     public void setBrand(String newBrand){
@@ -8,7 +10,7 @@ public class Bike implements Vehicle{
     public String getBrand(){
         return this.brand;
     }
-    private class Model{
+    private class Model implements Serializable{
         private String name = null;
         private double price = Double.NaN;
         Model prev;
@@ -23,7 +25,7 @@ public class Bike implements Vehicle{
     }
     private int size;
     private Model head;
-    private long lastModified = 0;
+    private transient long lastModified = 0;
     {
         lastModified = System.currentTimeMillis();
     }

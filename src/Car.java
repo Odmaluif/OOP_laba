@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.Arrays;
 
-public class Car implements Vehicle {
+public class Car implements Vehicle, Serializable{
     private String brand;
     private Model[] models;
     @Override
@@ -11,7 +12,7 @@ public class Car implements Vehicle {
     public void setBrand(String brand){
         this.brand = brand;
     }
-    private class Model{
+    private class Model implements Serializable{
         private String name;
         private double price;
 

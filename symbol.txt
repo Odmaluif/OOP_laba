@@ -1,0 +1,15 @@
+Bike
+Model
+6
+Model 1
+2500000.0
+Model 2
+2500000.0
+Model 3
+2500000.0
+Model 4
+2500000.0
+Model 5
+2500000.0
+Model 6
+2500000.0
