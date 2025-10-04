@@ -3,7 +3,8 @@ import java.util.DuplicateFormatFlagsException;
 
 public class Main {
     public static void main(String[] args) throws IOException, DuplicateModelNameException, ClassNotFoundException {
-        Vehicle brand = new Bike("Model", 6);
+        Bike brand = new Bike("Model", 6);
+        System.out.println(brand.getLastModified());
         VehicleMethod.printModelsNames(brand);
         try{
             System.out.println("Байтовый поток");
@@ -30,50 +31,24 @@ public class Main {
             oos.writeObject(brand);
             FileInputStream fis2 = new FileInputStream("serialization.txt");
             ObjectInputStream ois = new ObjectInputStream(fis2);
-            Vehicle v = (Vehicle) ois.readObject();
+            Bike v = (Bike) ois.readObject();
             VehicleMethod.printModelsNames(v);
-        }catch (Exception e){
-            System.out.println(e.getMessage());
-        }
-        try{
-            System.out.println("Ввод и вывод System.in и System.out");
-            System.out.println("Символьный поток транспортного средства бренда " + brand.getBrand());
-            OutputStreamWriter osw = new OutputStreamWriter(System.out);
-            VehicleMethod.writeVehicle(brand, osw);
-            System.out.println("Введите символьный поток");
-            InputStreamReader isr = new InputStreamReader(System.in);
-            VehicleMethod.printModelsNames(VehicleMethod.readVehicle(isr));
-
+            System.out.println(v.getLastModified());
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
 
-//        Vehicle brand = new Car("Model", 6);
-//        VehicleMethod.printModelsNames(brand);
+//        try{
+//            System.out.println("Ввод и вывод System.in и System.out");
+//            System.out.println("Символьный поток транспортного средства бренда " + brand.getBrand());
+//            OutputStreamWriter osw = new OutputStreamWriter(System.out);
+//            VehicleMethod.writeVehicle(brand, osw);
+//            System.out.println("Введите символьный поток");
+//            InputStreamReader isr = new InputStreamReader(System.in);
+//            VehicleMethod.printModelsNames(VehicleMethod.readVehicle(isr));
 //
-//        try {
-//            brand.addModel("Model 5", 1300000);
-//        } catch (DuplicateModelNameException e) {
+//        }catch (Exception e){
 //            System.out.println(e.getMessage());
 //        }
-//        VehicleMethod.printModelsNames(brand);
-//        try{
-//            brand.setModelName("Model 2", "Model 4");
-//        }catch (DuplicateModelNameException | NoSuchModelException e){
-//            System.out.println(e.getMessage());
-//        }
-//        try{
-//            brand.setModelPrice("Model 9", 343);
-//        }catch(NoSuchModelException e){
-//            System.out.println(e.getMessage());
-//        }
-//        VehicleMethod.printModelsNames(brand);
-//        try{
-//            brand.removeModel("Model 4");
-//        }catch (NoSuchModelException e){
-//            System.out.println(e.getMessage());
-//        }
-//        VehicleMethod.printModelsNames(brand);
-//        VehicleMethod.printModelsPrices(brand);
     }
 }

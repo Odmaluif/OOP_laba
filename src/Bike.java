@@ -25,7 +25,10 @@ public class Bike implements Vehicle, Serializable {
     }
     private int size;
     private Model head;
-    private transient long lastModified = 0;
+    private long lastModified;
+    public long getLastModified(){
+        return lastModified;
+    }
     {
         lastModified = System.currentTimeMillis();
     }
