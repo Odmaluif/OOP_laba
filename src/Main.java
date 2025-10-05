@@ -3,9 +3,20 @@ import java.util.DuplicateFormatFlagsException;
 
 public class Main {
     public static void main(String[] args) throws IOException, DuplicateModelNameException, ClassNotFoundException {
-        Bike brand = new Bike("Model", 6);
-        System.out.println(brand.getLastModified());
+
+        Vehicle brand = new Car("Model", 6);
+        Vehicle bike = new Bike("Model", 6);
         VehicleMethod.printModelsNames(brand);
+        VehicleMethod.printModelsNames(bike);
+        if(bike.equals(brand)){
+            System.out.println("одинаковые");
+        }
+        else{
+            System.out.println("чет не работает");
+        }
+        System.out.println(brand.toString());
+        System.out.println(bike.toString());
+        /*
         try{
             System.out.println("Байтовый поток");
             FileOutputStream fos = new FileOutputStream("byte.txt");
@@ -37,18 +48,17 @@ public class Main {
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
+        try{
+            System.out.println("Ввод и вывод System.in и System.out");
+            System.out.println("Символьный поток транспортного средства бренда " + brand.getBrand());
+            OutputStreamWriter osw = new OutputStreamWriter(System.out);
+            VehicleMethod.writeVehicle(brand, osw);
+            System.out.println("Введите символьный поток");
+            InputStreamReader isr = new InputStreamReader(System.in);
+            VehicleMethod.printModelsNames(VehicleMethod.readVehicle(isr));
 
-//        try{
-//            System.out.println("Ввод и вывод System.in и System.out");
-//            System.out.println("Символьный поток транспортного средства бренда " + brand.getBrand());
-//            OutputStreamWriter osw = new OutputStreamWriter(System.out);
-//            VehicleMethod.writeVehicle(brand, osw);
-//            System.out.println("Введите символьный поток");
-//            InputStreamReader isr = new InputStreamReader(System.in);
-//            VehicleMethod.printModelsNames(VehicleMethod.readVehicle(isr));
-//
-//        }catch (Exception e){
-//            System.out.println(e.getMessage());
-//        }
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }*/
     }
 }

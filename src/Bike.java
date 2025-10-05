@@ -1,4 +1,6 @@
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class Bike implements Vehicle, Serializable {
     private String brand;
@@ -161,12 +163,58 @@ public class Bike implements Vehicle, Serializable {
         head.prev = head;
         Model m;
         for(int i =0; i < size; i++){
-            m = new Model(brand + " " + (i+1), 2500000);
+            m = new Model(brand + " " + (i+1), 145000);
             m.next = head;
             m.prev = head.prev;
             head.prev.next = m;
             head.prev = m;
         }
 
+    }
+    @Override
+    public String toString(){
+        StringBuffer sb = new StringBuffer();
+        sb.append(brand);
+        sb.append("\n");
+        String[] names = getModelsNames();
+        double[] prices = getModelsPrices();
+        Model m = head.next;
+        while(m != head){
+            sb.append(m.name).append(", ").append(m.price).append("\n");
+            m = m.next;
+        }
+        return sb.toString();
+    }
+    @Override
+    public int hashCode(){
+        int result = Objects.hash(brand);
+        result = 31 * result + Arrays.hashCode(getModelsNames());
+        result = 31 * result + Arrays.hashCode(getModelsPrices());
+        result = 31 * result + getSize();
+        return result;
+    }
+    @Override
+    public boolean equals(Object obj){
+        if(this == obj) return true;
+        if(!(obj instanceof Vehicle)) return false;
+        Vehicle vehicle = (Vehicle) obj;
+        if(hashCode() != vehicle.hashCode()) return false;
+        if(!getBrand().equals(vehicle.getBrand())) return false;
+        if(getSize() != vehicle.getSize()) return false;
+        if(!Arrays.equals(getModelsNames(), vehicle.getModelsNames())) return false;
+        return Arrays.equals(getModelsPrices(), vehicle.getModelsPrices());
+    }
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        Bike cloned = (Bike) super.clone();
+        String[] names = getModelsNames();
+        double[] prices = getModelsPrices();
+        cloned.head;
+        cloned.head.next = head;
+        cloned.head.prev = head;
+        for(int i = 0; i < getSize(); i++){
+            cloned.models[i] = new Car.Model(names[i], prices[i]);
+        }
+        return cloned;
     }
 }
