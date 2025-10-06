@@ -2,9 +2,9 @@ import java.io.*;
 import java.util.DuplicateFormatFlagsException;
 
 public class Main {
-    public static void main(String[] args) throws IOException, DuplicateModelNameException, ClassNotFoundException {
+    public static void main(String[] args) throws IOException, DuplicateModelNameException, ClassNotFoundException, CloneNotSupportedException {
 
-        Vehicle brand = new Car("Model", 6);
+        Vehicle brand = new Bike("Model", 6);
         Vehicle bike = new Bike("Model", 6);
         VehicleMethod.printModelsNames(brand);
         VehicleMethod.printModelsNames(bike);
@@ -14,9 +14,14 @@ public class Main {
         else{
             System.out.println("чет не работает");
         }
+
         System.out.println(brand.toString());
         System.out.println(bike.toString());
-        /*
+        Bike cloneBike = (Bike) ((Bike) bike).clone();
+        System.out.println(cloneBike.equals(bike));
+        VehicleMethod.printModelsNames(cloneBike);
+
+          /*
         try{
             System.out.println("Байтовый поток");
             FileOutputStream fos = new FileOutputStream("byte.txt");

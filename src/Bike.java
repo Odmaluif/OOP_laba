@@ -2,7 +2,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class Bike implements Vehicle, Serializable {
+public class Bike implements Vehicle, Serializable, Cloneable {
     private String brand;
     @Override
     public void setBrand(String newBrand){
@@ -12,12 +12,12 @@ public class Bike implements Vehicle, Serializable {
     public String getBrand(){
         return this.brand;
     }
-    private class Model implements Serializable{
+    private class Model implements Serializable, Cloneable{
         private String name = null;
         private double price = Double.NaN;
         Model prev;
         Model next;
-        public Model(String name, double price){
+        public Model(String name, double price) {
             this.name = name;
             this.price = price;
         }
@@ -207,13 +207,19 @@ public class Bike implements Vehicle, Serializable {
     @Override
     public Object clone() throws CloneNotSupportedException {
         Bike cloned = (Bike) super.clone();
-        String[] names = getModelsNames();
-        double[] prices = getModelsPrices();
-        cloned.head;
-        cloned.head.next = head;
-        cloned.head.prev = head;
-        for(int i = 0; i < getSize(); i++){
-            cloned.models[i] = new Car.Model(names[i], prices[i]);
+        cloned.head = new Model();
+        cloned.head.next = cloned.head;
+        cloned.head.prev = cloned.head;
+        cloned.size = 0;
+        cloned.lastModified = System.currentTimeMillis();
+        Model m = head.next;
+        while(m != head){
+            try {
+                cloned.addModel(m.name, m.price);
+            } catch (DuplicateModelNameException e) {
+                System.out.println(e.getMessage());
+            }
+            m = m.next;
         }
         return cloned;
     }
