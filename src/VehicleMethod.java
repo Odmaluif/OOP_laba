@@ -36,7 +36,7 @@ public final class VehicleMethod {
             }
         }
         else{
-            System.out.println("каПусто");
+            System.out.println("Пусто");
         }
     }
     public static void outputVehicle(Vehicle vehicle, OutputStream out) throws IOException {
