@@ -144,6 +144,7 @@ public class Car implements Vehicle, Serializable, Cloneable{
         if(!Arrays.equals(getModelsNames(), vehicle.getModelsNames())) return false;
         return Arrays.equals(getModelsPrices(), vehicle.getModelsPrices());
     }
+    @Override
     public String toString(){
         StringBuffer sb = new StringBuffer();
         sb.append(brand).append("\n");
@@ -154,6 +155,7 @@ public class Car implements Vehicle, Serializable, Cloneable{
         }
         return sb.toString();
     }
+    @Override
     public int hashCode(){
         int result = Objects.hash(brand);
         result = 31 * result + Arrays.hashCode(getModelsNames());
@@ -161,6 +163,7 @@ public class Car implements Vehicle, Serializable, Cloneable{
         result = 31 * result + getSize();
         return result;
     }
+    @Override
     public Object clone() throws CloneNotSupportedException {
         Car cloned = (Car) super.clone();
         String[] names = getModelsNames();

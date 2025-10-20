@@ -9,19 +9,22 @@ public class Main {
 
         Vehicle clone = (Vehicle) brand.clone();
 
-        System.out.println("Оригинал:");
-        VehicleMethod.printModelsNames(brand);
-        System.out.println("Клон:");
-        VehicleMethod.printModelsNames(clone);
+        System.out.println("Перевод в строку оригинала: " + brand.toString());
+        System.out.println("Перевод в строку клона: " + clone.toString());
         System.out.println(brand.equals(clone));
+
+        System.out.println("Хэш код оригинала: " + brand.hashCode());
+        System.out.println("Хэш код клона: " + clone.hashCode() );
 
         clone.addModel("Model 23", 2321);
         System.out.println("добавлена модель в клон");
 
-        System.out.println("Оригинал:");
-        VehicleMethod.printModelsNames(brand);
-        System.out.println("Клон:");
-        VehicleMethod.printModelsNames(clone);
+        System.out.println("Перевод в строку оригинала: " + brand.toString());
+        System.out.println("Перевод в строку клона: " + clone.toString());
         System.out.println(brand.equals(clone));
+
+        System.out.println("Хэш код оригинала: " + brand.hashCode());
+        System.out.println("Хэш код клона: " + clone.hashCode() );
+
     }
 }
