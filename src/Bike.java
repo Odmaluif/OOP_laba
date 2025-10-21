@@ -198,7 +198,6 @@ public class Bike implements Vehicle, Serializable, Cloneable {
         if(this == obj) return true;
         if(!(obj instanceof Vehicle)) return false;
         Vehicle vehicle = (Vehicle) obj;
-        if(hashCode() != vehicle.hashCode()) return false;
         if(!getBrand().equals(vehicle.getBrand())) return false;
         if(getSize() != vehicle.getSize()) return false;
         if(!Arrays.equals(getModelsNames(), vehicle.getModelsNames())) return false;

@@ -2,7 +2,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class Car implements Vehicle, Serializable, Cloneable{
+public class Car implements Vehicle{
     private String brand;
     private Model[] models;
     @Override
@@ -138,7 +138,6 @@ public class Car implements Vehicle, Serializable, Cloneable{
         if(this == obj) return true;
         if(!(obj instanceof Vehicle)) return false;
         Vehicle vehicle = (Vehicle) obj;
-        if(hashCode() != vehicle.hashCode()) return false;
         if(!getBrand().equals(vehicle.getBrand())) return false;
         if(getSize() != vehicle.getSize()) return false;
         if(!Arrays.equals(getModelsNames(), vehicle.getModelsNames())) return false;
