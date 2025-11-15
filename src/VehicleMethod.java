@@ -1,4 +1,5 @@
 import java.io.*;
+import java.lang.reflect.Constructor;
 
 public final class VehicleMethod {
     public static double getArithmeticMean(Vehicle vehicle){
@@ -129,4 +130,15 @@ public final class VehicleMethod {
         }
         return vehicle;
     }
+    public static Vehicle createVehicle(String brand, int size, Vehicle vehicle) throws Exception{
+        try {
+            Class<?> carClass = vehicle.getClass();
+            Constructor<?> constructor = carClass.getConstructor(String.class, int.class);
+            return (Vehicle) constructor.newInstance(brand, size);
+        }catch (Exception e){
+            System.err.println("Ошибка создания объекта: " + e.getMessage());
+            return null;
+        }
+    }
+    
 }
