@@ -6,7 +6,7 @@ import java.lang.reflect.Method;
 public class Main {
     public static void main(String[] args) throws Exception {
         Test(args);
-
+        Vehicle m = new Moped("Moped", 7);
     }
     public static void Test(String args[]) throws Exception {
         String className = args[0];
