@@ -1,8 +1,7 @@
 import java.io.Serializable;
 import java.util.Arrays;
-import java.util.Objects;
 
-public class Car implements Vehicle, Serializable, Cloneable{
+public class Car implements Vehicle, Serializable{
     private String brand;
     private Model[] models;
     @Override
@@ -133,46 +132,4 @@ public class Car implements Vehicle, Serializable, Cloneable{
         }
         this.models = models;
     }
-    @Override
-    public boolean equals(Object obj){
-        if(this == obj) return true;
-        if(!(obj instanceof Vehicle)) return false;
-        Vehicle vehicle = (Vehicle) obj;
-        if(hashCode() != vehicle.hashCode()) return false;
-        if(!getBrand().equals(vehicle.getBrand())) return false;
-        if(getSize() != vehicle.getSize()) return false;
-        if(!Arrays.equals(getModelsNames(), vehicle.getModelsNames())) return false;
-        return Arrays.equals(getModelsPrices(), vehicle.getModelsPrices());
-    }
-    @Override
-    public String toString(){
-        StringBuffer sb = new StringBuffer();
-        sb.append(brand).append("\n");
-        double[] prices = getModelsPrices();
-        String[] names = getModelsNames();
-        for(int i = 0; i < getSize(); i++){
-            sb.append(names[i]).append(", ").append(prices[i]).append("\n");
-        }
-        return sb.toString();
-    }
-    @Override
-    public int hashCode(){
-        int result = Objects.hash(brand);
-        result = 31 * result + Arrays.hashCode(getModelsNames());
-        result = 31 * result + Arrays.hashCode(getModelsPrices());
-        result = 31 * result + getSize();
-        return result;
-    }
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        Car cloned = (Car) super.clone();
-        String[] names = getModelsNames();
-        double[] prices = getModelsPrices();
-        cloned.models = new Model[models.length];
-        for(int i = 0; i < getSize(); i++){
-            cloned.models[i] = new Model(names[i], prices[i]);
-        }
-        return cloned;
-    }
-
 }
