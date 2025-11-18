@@ -2,7 +2,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class Car implements Vehicle, Serializable, Cloneable{
+public class Car implements Vehicle{
     private String brand;
     private Model[] models;
     @Override

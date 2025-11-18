@@ -1,5 +1,6 @@
 import java.io.*;
 import java.lang.reflect.Constructor;
+import java.util.Locale;
 import java.util.Scanner;
 
 public final class VehicleMethod {
@@ -85,61 +86,66 @@ public final class VehicleMethod {
         }
         return vehicle;
     }
-    public static void writeVehicle(Vehicle v, Writer out) {
+    public static void writeVehicle(Vehicle vehicle, Writer out) throws IOException {
         PrintWriter pw = new PrintWriter(out);
 
-        // Использование printf() для форматированного вывода
-        pw.printf("Тип: %s%n", v.getClass().getSimpleName());
-        pw.printf("Марка: %s%n", v.getBrand());
-        pw.printf("Количество моделей: %d%n", v.getSize());
+        pw.printf("%s%n", vehicle.getClass().getSimpleName());
+        pw.printf("%s%n", vehicle.getBrand());
+        pw.printf("%d%n", vehicle.getSize());
 
-        String[] names = v.getModelsNames();
-        double[] prices = v.getModelsPrices();
-        pw.println("Модели и цены:");
-        for (int i = 0; i < v.getSize(); i++) {
-            // Форматирование: название + цена с 2 знаками после запятой + валюта
-            pw.printf("  %s: %.2f руб.%n", names[i], prices[i]);
+        String[] names = vehicle.getModelsNames();
+        double[] prices = vehicle.getModelsPrices();
+
+        for (int i = 0; i < vehicle.getSize(); i++) {
+            pw.printf(Locale.US, "%s %.2f %n", names[i], prices[i]);
         }
+
         pw.flush();
     }
     public static Vehicle readVehicle(Reader in) throws IOException, DuplicateModelNameException {
         Scanner scanner = new Scanner(in);
 
-        // Чтение с разбором форматированных меток
-        scanner.next(); // "Тип:"
-        String className = scanner.nextLine().trim();
+        try {
+            String className = scanner.nextLine().trim();
+            String brand = scanner.nextLine().trim();
+            int size = scanner.nextInt();
+            scanner.nextLine();
 
-        scanner.next(); // "Марка:"
-        String brand = scanner.nextLine().trim();
+            Vehicle vehicle = createVehicleByType(className, brand);
 
-        scanner.next(); // "Количество"
-        scanner.next(); // "моделей:"
-        int size = scanner.nextInt();
-        scanner.nextLine(); // очистка буфера
+            for (int i = 0; i < size; i++) {
+                String line = scanner.nextLine().trim();
+                String[] parts = line.split(" ");
 
-        scanner.nextLine(); // "Модели и цены:"
+                if (parts.length >= 2) {
+                    StringBuilder modelName = new StringBuilder();
+                    for (int j = 0; j < parts.length - 1; j++) {
+                        if (j > 0) modelName.append(" ");
+                        modelName.append(parts[j]);
+                    }
 
-        Vehicle vehicle = createVehicleByType(className, brand);
+                    double price = Double.parseDouble(parts[parts.length - 1]);
+                    vehicle.addModel(modelName.toString(), price);
+                } else {
+                    throw new IOException("Неверный формат строки модели: " + line);
+                }
+            }
 
-        for (int i = 0; i < size; i++) {
-            String line = scanner.nextLine().trim();
-            // Разбор строки вида "Corolla: 1200000.00 руб."
-            line = line.replace(" руб.", "");
-            String[] parts = line.split(": ");
-            String modelName = parts[0];
-            double price = Double.parseDouble(parts[1]);
+            return vehicle;
 
-            vehicle.addModel(modelName, price);
+        } catch (java.util.InputMismatchException e) {
+            throw new IOException("Неверный формат числа в файле", e);
+        } catch (NumberFormatException e) {
+            throw new IOException("Неверный формат цены", e);
+        } finally {
+            scanner.close();
         }
-
-        scanner.close();
-        return vehicle;
     }
     private static Vehicle createVehicleByType(String className, String brand) {
         try {
             switch (className) {
                 case "Car":
-                    return new Car(brand, 0); // размер 0 - модели добавятся позже
+                    return new Car(brand, 0);
                 case "Bike":
                     return new Bike(brand, 0);
                 case "Scooter":
@@ -155,7 +161,7 @@ public final class VehicleMethod {
             throw new RuntimeException("Ошибка создания " + className, e);
         }
     }
-    public static Vehicle createVehicle(String brand, int size, Vehicle vehicle) throws Exception{
+    public static Vehicle createVehicle(String brand, int size, Vehicle vehicle) {
         try {
             Class<?> carClass = vehicle.getClass();
             Constructor<?> constructor = carClass.getConstructor(String.class, int.class);

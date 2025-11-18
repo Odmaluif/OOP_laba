@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class Scooter implements Vehicle, Serializable, Cloneable {
+public class Scooter implements Vehicle{
     private String brand;
     private Map<String, Double> models;
     public Scooter(String brand, int size) {
@@ -115,5 +115,16 @@ public class Scooter implements Vehicle, Serializable, Cloneable {
         Scooter cloned = (Scooter) super.clone();
         cloned.models = new HashMap<>(this.models);
         return cloned;
+    }
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(brand).append("\n");
+
+        for (Map.Entry<String, Double> entry : models.entrySet()) {
+            sb.append(entry.getKey()).append(", ").append(entry.getValue()).append("\n");
+        }
+
+        return sb.toString();
     }
 }

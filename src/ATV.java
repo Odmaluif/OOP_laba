@@ -1,9 +1,9 @@
 import java.io.Serializable;
 import java.util.*;
 
-public class ATV implements Vehicle, Serializable, Cloneable {
+public class ATV implements Vehicle{
     private String brand;
-    private List<Model> models;
+    private ArrayList<Model> models;
 
     private class Model implements Serializable {
         String name;

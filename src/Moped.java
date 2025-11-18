@@ -1,7 +1,7 @@
 import java.io.Serializable;
 import java.util.*;
 
-public class Moped implements Vehicle, Serializable, Cloneable {
+public class Moped implements Vehicle{
     private String brand;
     private LinkedList<Model> models;
 
