@@ -1,4 +1,6 @@
-public interface Vehicle {
+import java.io.Serializable;
+
+public interface Vehicle extends Serializable, Cloneable{
     void setBrand(String brand);
     String getBrand();
     void setModelName(String oldName, String newName) throws DuplicateModelNameException, NoSuchModelException;

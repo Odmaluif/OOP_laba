@@ -1,5 +1,7 @@
 import java.io.*;
 import java.lang.reflect.Constructor;
+import java.util.Locale;
+import java.util.Scanner;
 
 public final class VehicleMethod {
     public static double getArithmeticMean(Vehicle vehicle){
@@ -74,16 +76,7 @@ public final class VehicleMethod {
 
         int size = dis.readInt();
 
-        Vehicle vehicle;
-        if(className.equals("Car")){
-            vehicle = new Car(brand, 0);
-        }
-        else if(className.equals("Bike")){
-            vehicle = new Bike(brand, 0);
-        }
-        else{
-            throw new IOException("Неизвестный тип транспортного средства: " + className);
-        }
+        Vehicle vehicle = createVehicleByType(className, brand);
         for(int i = 0 ; i< size; i++){
             byte[] nameByte = new byte[dis.readInt()];
             dis.readFully(nameByte);
@@ -93,44 +86,82 @@ public final class VehicleMethod {
         }
         return vehicle;
     }
-    public static void writeVehicle(Vehicle v, Writer out) throws IOException{
+    public static void writeVehicle(Vehicle vehicle, Writer out) throws IOException {
         PrintWriter pw = new PrintWriter(out);
-        pw.println(v.getClass().getSimpleName());
-        pw.println(v.getBrand());
-        pw.println(v.getSize());
 
-        String[] names = v.getModelsNames();
-        double[] prices = v.getModelsPrices();
-        for(int i = 0; i< v.getSize(); i++){
-            pw.println(names[i]);
-            pw.println(prices[i]);
+        pw.printf("%s%n", vehicle.getClass().getSimpleName());
+        pw.printf("%s%n", vehicle.getBrand());
+        pw.printf("%d%n", vehicle.getSize());
+
+        String[] names = vehicle.getModelsNames();
+        double[] prices = vehicle.getModelsPrices();
+
+        for (int i = 0; i < vehicle.getSize(); i++) {
+            pw.printf(Locale.US, "%s %.2f %n", names[i], prices[i]);
         }
+
         pw.flush();
     }
     public static Vehicle readVehicle(Reader in) throws IOException, DuplicateModelNameException {
-        BufferedReader reader = new BufferedReader(in);
+        Scanner scanner = new Scanner(in);
 
-        String className = reader.readLine();
-        String brand = reader.readLine();
-        int size = Integer.parseInt(reader.readLine());
-        Vehicle vehicle;
-        if(className.equals("Car")){
-            vehicle = new Car(brand, 0);
+        try {
+            String className = scanner.nextLine().trim();
+            String brand = scanner.nextLine().trim();
+            int size = scanner.nextInt();
+            scanner.nextLine();
+
+            Vehicle vehicle = createVehicleByType(className, brand);
+
+            for (int i = 0; i < size; i++) {
+                String line = scanner.nextLine().trim();
+                String[] parts = line.split(" ");
+
+                if (parts.length >= 2) {
+                    StringBuilder modelName = new StringBuilder();
+                    for (int j = 0; j < parts.length - 1; j++) {
+                        if (j > 0) modelName.append(" ");
+                        modelName.append(parts[j]);
+                    }
+
+                    double price = Double.parseDouble(parts[parts.length - 1]);
+                    vehicle.addModel(modelName.toString(), price);
+                } else {
+                    throw new IOException("Неверный формат строки модели: " + line);
+                }
+            }
+
+            return vehicle;
+
+        } catch (java.util.InputMismatchException e) {
+            throw new IOException("Неверный формат числа в файле", e);
+        } catch (NumberFormatException e) {
+            throw new IOException("Неверный формат цены", e);
+        } finally {
+            scanner.close();
         }
-        else if(className.equals("Bike")){
-            vehicle = new Bike(brand, 0);
-        }
-        else{
-            throw new IOException("Неизвестный тип транспортного средства: " + className);
-        }
-        for(int i = 0; i< size; i++){
-            String name = reader.readLine();
-            double price = Double.parseDouble(reader.readLine());
-            vehicle.addModel(name, price);
-        }
-        return vehicle;
     }
-    public static Vehicle createVehicle(String brand, int size, Vehicle vehicle) throws Exception{
+    private static Vehicle createVehicleByType(String className, String brand) {
+        try {
+            switch (className) {
+                case "Car":
+                    return new Car(brand, 0);
+                case "Bike":
+                    return new Bike(brand, 0);
+                case "Scooter":
+                    return new Scooter(brand, 0);
+                case "ATV":
+                    return new ATV(brand, 0);
+                case "Moped":
+                    return new Moped(brand, 0);
+                default:
+                    throw new IllegalArgumentException("Неизвестный тип транспортного средства: " + className);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Ошибка создания " + className, e);
+        }
+    }
+    public static Vehicle createVehicle(String brand, int size, Vehicle vehicle) {
         try {
             Class<?> carClass = vehicle.getClass();
             Constructor<?> constructor = carClass.getConstructor(String.class, int.class);
@@ -140,5 +171,22 @@ public final class VehicleMethod {
             return null;
         }
     }
+    public static double getAveragePrice(Vehicle... vehicles) {
+        if (vehicles == null || vehicles.length == 0) {
+            return 0;
+        }
 
+        double sum = 0;
+        int totalModels = 0;
+
+        for (Vehicle vehicle : vehicles) {
+            double[] prices = vehicle.getModelsPrices();
+            for (double price : prices) {
+                sum += price;
+            }
+            totalModels += vehicle.getSize();
+        }
+
+        return totalModels > 0 ? sum / totalModels : 0;
+    }
 }
