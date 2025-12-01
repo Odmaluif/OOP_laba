@@ -4,16 +4,13 @@ import java.io.*;
 import java.lang.reflect.Executable;
 import java.util.DuplicateFormatFlagsException;
 import java.lang.reflect.Method;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.*;
 import java.util.concurrent.locks.ReentrantLock;
 
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        task4();
+        task5();
     }
     public void task1(){
         Vehicle vehicle = new ATV("ATV", 10000);
@@ -58,6 +55,19 @@ public class Main {
         executor.execute(new BrandThread(atv));
         executor.execute(new BrandThread(car));
         executor.shutdown();
+    }
+    public static void task5() throws InterruptedException {
+        BlockingQueue<Vehicle> abq = new ArrayBlockingQueue<>(3);
+        String[] files = {"brand1.txt", "brand2.txt", "brand3.txt", "brand4.txt", "brand5.txt"};
+
+        for(String fileName: files){
+            new Thread(new FileVehicleReaderThread(fileName, abq)).start();
+        }
+        for (int i = 0; i < 5; i++) {
+            Vehicle vehicle = abq.take();
+            System.out.println("Получено из очереди: " + vehicle.getBrand());
+        }
+
     }
     public static Vehicle test(String args[]) throws Exception {
         String className = args[0];
