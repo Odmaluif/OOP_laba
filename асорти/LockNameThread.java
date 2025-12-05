@@ -1,8 +1,8 @@
 import java.util.concurrent.locks.ReentrantLock;
 
 public class LockNameThread implements Runnable{
-    Vehicle vehicle;
-    ReentrantLock rl = new ReentrantLock();
+    private Vehicle vehicle;
+    private ReentrantLock rl = new ReentrantLock();
     public void run(){
         rl.lock();
         try{

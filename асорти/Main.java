@@ -1,8 +1,3 @@
-import com.sun.jdi.request.ThreadDeathRequest;
-
-import java.io.*;
-import java.lang.reflect.Executable;
-import java.util.DuplicateFormatFlagsException;
 import java.lang.reflect.Method;
 import java.util.concurrent.*;
 import java.util.concurrent.locks.ReentrantLock;
@@ -10,38 +5,38 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        task5();
+        task2();
     }
-    public void task1(){
-        Vehicle vehicle = new ATV("ATV", 10000);
+    public static void task1(){
+        Vehicle vehicle = new ATV("ATV", 30000);
         Thread thread1 = new PriceThread(vehicle);
         Thread thread2 = new NameThread(vehicle);
 
         thread1.setPriority(Thread.MAX_PRIORITY);
         thread2.setPriority(Thread.MIN_PRIORITY);
 
-        thread2.start();
         thread1.start();
+        thread2.start();
     }
     public static void task2(){
-        Vehicle vehicle = new Bike("Bike", 100);
+        Vehicle vehicle = new Bike("Bike", 10);
         TransportSynchronizer ts = new TransportSynchronizer(vehicle);
         SynchronizeNameThread snt = new SynchronizeNameThread(ts);
         SynchronizePriceThread spt = new SynchronizePriceThread(ts);
         var thread1 = new Thread(snt);
         var thread2 = new Thread(spt);
-        thread2.start();
         thread1.start();
+        thread2.start();
     }
     public static void task3(){
         ReentrantLock rl = new ReentrantLock();
-        Vehicle vehicle = new Moped("Moped", 70);
+        Vehicle vehicle = new Moped("Moped", 7);
         Runnable runnable1 = new LockNameThread(vehicle, rl);
         Runnable runnable2 = new LockPriceTread(vehicle, rl);
         Thread thread1 = new Thread(runnable1);
         Thread thread2 = new Thread(runnable2);
-        thread1.start();
         thread2.start();
+        thread1.start();
     }
     public static void task4(){
         Vehicle moped = new Moped("moped", 4);
@@ -57,7 +52,7 @@ public class Main {
         executor.shutdown();
     }
     public static void task5() throws InterruptedException {
-        BlockingQueue<Vehicle> abq = new ArrayBlockingQueue<>(3);
+        BlockingQueue<Vehicle> abq = new ArrayBlockingQueue<>(2);
         String[] files = {"brand1.txt", "brand2.txt", "brand3.txt", "brand4.txt", "brand5.txt"};
 
         for(String fileName: files){
@@ -69,7 +64,7 @@ public class Main {
         }
 
     }
-    public static Vehicle test(String args[]) throws Exception {
+    /*public static Vehicle test(String args[]) throws Exception {
         String className = args[0];
         String methodName = args[1];
         String modelName = args[2];
@@ -80,5 +75,5 @@ public class Main {
         Method method = carClass.getMethod(methodName, String.class, double.class);
         method.invoke(car, modelName, newPrice);
         return car;
-    }
+    }*/
 }
